@@ -9,12 +9,12 @@ This project implements an **Order Payment Service** that integrates with `Redis
 
 `Lettuce` is a **scalable**, **high-performance**, and **non-blocking** Redis client for Java. It is widely used in Spring Boot applications for **caching**, **message queuing**, and **distributed data processing**. It is also a **reactive and thread-safe** Redis client built on `Netty`. It supports both **synchronous and asynchronous (reactive)** interactions with Redis.
 
-🔥 Key Features of Lettuce
-✅ Supports Asynchronous & Reactive APIs (using CompletableFuture, RxJava, and Project Reactor)
-✅ Thread-Safe Connections (multiple threads can use a single connection)
-✅ Automatic Reconnection & Cluster Support
-✅ Built on Netty (High Performance, Non-Blocking IO)
-✅ Supports Redis Pub/Sub & Redis Streams
+### 🔥 Key Features of Lettuce
+- ✅ Supports Asynchronous & Reactive APIs (using CompletableFuture, RxJava, and Project Reactor)
+- ✅ Thread-Safe Connections (multiple threads can use a single connection)
+- ✅ Automatic Reconnection & Cluster Support
+- ✅ Built on Netty (High Performance, Non-Blocking IO)
+- ✅ Supports Redis Pub/Sub & Redis Streams
 
 This project uses `LettuceConnectionFactory` to configure Redis connections with shared **ClientResources**. This connection factory is used by `RedisTemplate` to interact with Redis, enabling efficient message publishing and retrieval. The `RedisPublisher` service is responsible for publishing messages to the appropriate Redis channels (**PAYMENT_SUCCESS** and **PAYMENT_FAILED**).
 
