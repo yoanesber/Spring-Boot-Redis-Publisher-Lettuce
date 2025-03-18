@@ -171,7 +171,7 @@ spring.data.redis.lettuce.shutdown-timeout=${REDIS_LETTUCE_SHUTDOWN_TIMEOUT}
 A step by step series of examples that tell you how to get a development env running.
 1. Clone the repository
 ```bash
-git clone https://github.com/yoanesber/Spring-Boot-Redis-Lettuce.git
+git clone https://github.com/yoanesber/Spring-Boot-Redis-Publisher-Lettuce.git
 ```
 
 2. Ensure Redis is installed and running:
