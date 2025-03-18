@@ -1,5 +1,8 @@
 package com.yoanesber.spring.redis_publisher_lettuce.redis.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -19,13 +22,18 @@ public class MessagePublisherImpl implements MessagePublisher {
         this.redisTemplate = redisTemplate;
     }
 
+    @Override
     public void publishMessage(String channel, Object message) {
         Assert.hasText(channel, "Channel must not be empty");
         Assert.notNull(message, "Message must not be null");
 
         try {
-            redisTemplate.convertAndSend(channel, message);
-            logger.info("Published message to channel: {} with message: {}", channel, message);
+            Map<String, Object> data = new HashMap<>();
+            data.put("event", channel);
+            data.put("message", message);
+
+            redisTemplate.convertAndSend(channel, data);
+            logger.info("Published message to channel: {} with message: {} and data: {}", channel, message, data);
         } catch (Exception e) {
             logger.error("Error publishing message to channel: {}", channel, e);
             throw new RuntimeException("Error publishing message to channel: " + channel, e);
