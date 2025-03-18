@@ -180,9 +180,6 @@ redis-server
 ```
 
 3. Set up Redis user and password in `.env.development`
-```bash
-redis-server
-```
 
 4. (Optional) If you want to add a specific user with access to a specific channel, you can run the following command in Redis CLI:
 ```bash
