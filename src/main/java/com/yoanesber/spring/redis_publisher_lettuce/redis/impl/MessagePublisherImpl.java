@@ -1,4 +1,4 @@
-package com.yoanesber.spring.redis_publisher_lettuce.redis;
+package com.yoanesber.spring.redis_publisher_lettuce.redis.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -6,15 +6,16 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
+import com.yoanesber.spring.redis_publisher_lettuce.redis.MessagePublisher;
 
 @Component
-public class RedisPublisher {
+public class MessagePublisherImpl implements MessagePublisher {
     
     private final RedisTemplate<String, Object> redisTemplate;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public RedisPublisher(RedisTemplate<String, Object> redisTemplate) {
+    public MessagePublisherImpl(RedisTemplate<String, Object> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 

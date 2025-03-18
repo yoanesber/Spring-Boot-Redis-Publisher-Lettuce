@@ -15,15 +15,15 @@ import com.yoanesber.spring.redis_publisher_lettuce.dto.PaymentResponseDTO;
 import com.yoanesber.spring.redis_publisher_lettuce.entity.Order;
 import com.yoanesber.spring.redis_publisher_lettuce.entity.OrderDetail;
 import com.yoanesber.spring.redis_publisher_lettuce.entity.OrderPayment;
-import com.yoanesber.spring.redis_publisher_lettuce.redis.RedisPublisher;
+import com.yoanesber.spring.redis_publisher_lettuce.redis.impl.MessagePublisherImpl;
 import com.yoanesber.spring.redis_publisher_lettuce.service.OrderPaymentService;
 
 @Service
 public class OrderPaymentServiceImpl implements OrderPaymentService {
 
-    private final RedisPublisher redisPublisher;
+    private final MessagePublisherImpl redisPublisher;
 
-    public OrderPaymentServiceImpl(RedisPublisher redisPublisher) {
+    public OrderPaymentServiceImpl(MessagePublisherImpl redisPublisher) {
         this.redisPublisher = redisPublisher;
     }
 
