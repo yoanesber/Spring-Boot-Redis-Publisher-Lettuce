@@ -311,3 +311,6 @@ mvn spring-boot:run
     "data": null
 }
 ```
+
+## 📌 Reference
+For the Redis Subscriber implementation, check out [Spring Boot Redis Subscriber with Lettuce](https://github.com/yoanesber/Spring-Boot-Redis-Subscriber-Lettuce).
