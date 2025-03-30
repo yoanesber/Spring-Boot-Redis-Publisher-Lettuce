@@ -73,7 +73,7 @@ Message Types:
 
 **Lettuce** is a **scalable**, **high-performance**, and **non-blocking** Redis client for Java. It is also a **reactive and thread-safe** Redis client built on `Netty`. It supports both **synchronous and asynchronous (reactive)** interactions with Redis.  
 
-#### 🔥 Key Features of Lettuce
+#### 🚀 Key Features of Lettuce
 - Supports Asynchronous & Reactive APIs (using CompletableFuture, RxJava, and Project Reactor).
 - Thread-Safe Connections (multiple threads can use a single connection).
 - Automatic Reconnection & Cluster Support.
