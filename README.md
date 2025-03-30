@@ -24,7 +24,7 @@ Message Types:
 - ORDER_SHIPPED – Order has been shipped.
 - ORDER_DELIVERED – Order is delivered to the customer.
 
-**Use Case**: Notify users in real-time about their order status.  
+    **Use Case**: Notify users in real-time about their order status.  
 
 2. Payment Processing & Fraud Detection (Fintech)  
 Message Types:  
@@ -34,9 +34,9 @@ Message Types:
 - PAYMENT_REFUNDED – When a refund is issued.
 - FRAUD_ALERT – When fraud is detected.
 
-**Use Case**:  
-- Notify customers of payment transactions.
-- Alert fraud detection systems to take action.
+    **Use Case**:  
+    - Notify customers of payment transactions.
+    - Alert fraud detection systems to take action.
 
 3. Notification & Alerts System  
 Message Types:  
@@ -46,9 +46,9 @@ Message Types:
 - PROMOTIONAL_OFFER – A business sends discounts to customers.
 - SYSTEM_ALERT – A critical error occurs (e.g., server downtime alert).
 
-**Use Case**:  
-- Real-time user notifications for chat apps like WhatsApp or Slack.
-- Push notifications for social media updates.
+    **Use Case**:  
+    - Real-time user notifications for chat apps like WhatsApp or Slack.
+    - Push notifications for social media updates.
 
 
 4. Real-Time Stock Market & Trading Platforms (Finance)  
@@ -58,7 +58,7 @@ Message Types:
 - MARKET_NEWS_UPDATE – News impacting the stock market.
 - PORTFOLIO_ALERT – Portfolio value changes significantly.
 
-**Use Case**: Stock trading apps like Robinhood use Redis for real-time price updates.  
+    **Use Case**: Stock trading apps like Robinhood use Redis for real-time price updates.  
 
 5. IoT & Real-Time Sensor Data (Smart Devices)  
 Message Types:  
@@ -66,7 +66,7 @@ Message Types:
 - MOTION_DETECTED – Security camera detects movement.
 - DEVICE_HEALTH_CHECK – IoT device reports its health.
 
-**Use Case**: Smart home automation, monitoring energy consumption, and security alerts.  
+    **Use Case**: Smart home automation, monitoring energy consumption, and security alerts.  
 
 
 ### 🥬 What is Lettuce?
