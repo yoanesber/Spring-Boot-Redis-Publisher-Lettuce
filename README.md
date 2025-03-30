@@ -167,15 +167,15 @@ cd Spring-Boot-Redis-Publisher-Lettuce
 redis-server
 ```
 
-3. Set up Redis password in `.env.development` file:
+3. (Optional) If you want to add a specific user with access to a specific channel, you can run the following command in Redis CLI:
+```bash
+ACL SETUSER your_user +CHANNEL~your_channel on >your_password
+```
+
+4. Set up Redis password in `.env.development` file:
 ```properties
 # Redis properties
 REDIS_PASSWORD=your_password
-```
-
-4. (Optional) If you want to add a specific user with access to a specific channel, you can run the following command in Redis CLI:
-```bash
-ACL SETUSER your_user +CHANNEL~your_channel on >your_password
 ```
 
 5. Build and run the application
