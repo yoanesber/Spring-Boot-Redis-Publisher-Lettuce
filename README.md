@@ -159,6 +159,7 @@ A step by step series of examples that tell you how to get a development env run
 1. Clone the repository
 ```bash
 git clone https://github.com/yoanesber/Spring-Boot-Redis-Publisher-Lettuce.git
+cd Spring-Boot-Redis-Publisher-Lettuce
 ```
 
 2. Ensure Redis is installed and running:
