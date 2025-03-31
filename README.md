@@ -294,8 +294,7 @@ mvn spring-boot:run
 }
 ```
 
-In the JSON request above, we use `"paymentMethod":"CREDITCARD"`, which should be `"paymentMethod":"CREDIT_CARD"`, to test an invalid request.  
-This ensures the API correctly validates input and returns an appropriate error response for unsupported or incorrectly formatted values.  
+In the JSON request above, we use `"paymentMethod":"CREDITCARD"`, which should be `"paymentMethod":"CREDIT_CARD"`, to test an invalid request. This ensures the API correctly validates input and returns an appropriate error response for unsupported or incorrectly formatted values.  
 
 **Invalid Response:**
 ```json
