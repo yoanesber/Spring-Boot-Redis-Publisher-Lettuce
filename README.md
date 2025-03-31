@@ -18,21 +18,21 @@ Redis **Publish/Subscribe (Pub/Sub)** is often used in business applications for
 
 1. Order Processing System (E-commerce)  
 Message Types:  
-- ORDER_PLACED – When a customer places an order.
-- PAYMENT_SUCCESS – Payment is successful.
-- PAYMENT_FAILED – Payment is declined.
-- ORDER_SHIPPED – Order has been shipped.
-- ORDER_DELIVERED – Order is delivered to the customer.
+    - ORDER_PLACED – When a customer places an order.
+    - PAYMENT_SUCCESS – Payment is successful.
+    - PAYMENT_FAILED – Payment is declined.
+    - ORDER_SHIPPED – Order has been shipped.
+    - ORDER_DELIVERED – Order is delivered to the customer.
 
     **Use Case**: Notify users in real-time about their order status.  
 
 2. Payment Processing & Fraud Detection (Fintech)  
 Message Types:  
-- PAYMENT_INITIATED – When a user initiates a payment.
-- PAYMENT_AUTHORIZED – When payment is authorized.
-- PAYMENT_REJECTED – Payment failed due to insufficient funds or fraud detection.
-- PAYMENT_REFUNDED – When a refund is issued.
-- FRAUD_ALERT – When fraud is detected.
+    - PAYMENT_INITIATED – When a user initiates a payment.
+    - PAYMENT_AUTHORIZED – When payment is authorized.
+    - PAYMENT_REJECTED – Payment failed due to insufficient funds or fraud detection.
+    - PAYMENT_REFUNDED – When a refund is issued.
+    - FRAUD_ALERT – When fraud is detected.
 
     **Use Case**:  
     - Notify customers of payment transactions.
@@ -40,11 +40,11 @@ Message Types:
 
 3. Notification & Alerts System  
 Message Types:  
-- NEW_MESSAGE – A user receives a new message in a chat app.
-- NEW_COMMENT – Someone comments on a post.
-- FRIEND_REQUEST – A new friend request is received.
-- PROMOTIONAL_OFFER – A business sends discounts to customers.
-- SYSTEM_ALERT – A critical error occurs (e.g., server downtime alert).
+    - NEW_MESSAGE – A user receives a new message in a chat app.
+    - NEW_COMMENT – Someone comments on a post.
+    - FRIEND_REQUEST – A new friend request is received.
+    - PROMOTIONAL_OFFER – A business sends discounts to customers.
+    - SYSTEM_ALERT – A critical error occurs (e.g., server downtime alert).
 
     **Use Case**:  
     - Real-time user notifications for chat apps like WhatsApp or Slack.
@@ -53,18 +53,18 @@ Message Types:
 
 4. Real-Time Stock Market & Trading Platforms (Finance)  
 Message Types:  
-- STOCK_PRICE_UPDATE – Stock price updates every second.
-- TRADE_EXECUTED – A stock trade is completed.
-- MARKET_NEWS_UPDATE – News impacting the stock market.
-- PORTFOLIO_ALERT – Portfolio value changes significantly.
+    - STOCK_PRICE_UPDATE – Stock price updates every second.
+    - TRADE_EXECUTED – A stock trade is completed.
+    - MARKET_NEWS_UPDATE – News impacting the stock market.
+    - PORTFOLIO_ALERT – Portfolio value changes significantly.
 
     **Use Case**: Stock trading apps like Robinhood use Redis for real-time price updates.  
 
 5. IoT & Real-Time Sensor Data (Smart Devices)  
 Message Types:  
-- TEMPERATURE_UPDATE – Sends real-time temperature readings.
-- MOTION_DETECTED – Security camera detects movement.
-- DEVICE_HEALTH_CHECK – IoT device reports its health.
+    - TEMPERATURE_UPDATE – Sends real-time temperature readings.
+    - MOTION_DETECTED – Security camera detects movement.
+    - DEVICE_HEALTH_CHECK – IoT device reports its health.
 
     **Use Case**: Smart home automation, monitoring energy consumption, and security alerts.  
 
@@ -191,7 +191,7 @@ mvn spring-boot:run
 ### Order Service
 `POST http://localhost:8081/api/v1/order-payment` - Create a new order payment and trigger payment processing.  
 
-**Body Request - CREDIT_CARD**
+**Body Request (CREDIT_CARD):**
 ```json
 {
     "orderId":"ORD123456789",
@@ -204,7 +204,7 @@ mvn spring-boot:run
 }
 ```
 
-**Body Response - CREDIT_CARD**
+**Successful Response (CREDIT_CARD):**
 ```json
 {
     "statusCode": 201,
@@ -222,7 +222,7 @@ mvn spring-boot:run
 }
 ```
 
-**Body Request - PAYPAL**
+**Body Request (PAYPAL):**
 ```json
 {
     "orderId":"ORD123456789",
@@ -233,7 +233,7 @@ mvn spring-boot:run
 }
 ```
 
-**Body Response - PAYPAL**
+**Successful Response (PAYPAL):**
 ```json
 {
     "statusCode": 201,
@@ -251,7 +251,7 @@ mvn spring-boot:run
 }
 ```
 
-**Body Request - BANK_TRANSFER**
+**Body Request (BANK_TRANSFER):**
 ```json
 {
     "orderId":"ORD123456789",
@@ -263,7 +263,7 @@ mvn spring-boot:run
 }
 ```
 
-**Body Response - BANK_TRANSFER**
+**Successful Response (BANK_TRANSFER):**
 ```json
 {
     "statusCode": 201,
@@ -281,7 +281,7 @@ mvn spring-boot:run
 }
 ```
 
-**Invalid Request**
+**Invalid Request:**
 ```json
 {
     "orderId":"ORD123456789",
@@ -294,7 +294,10 @@ mvn spring-boot:run
 }
 ```
 
-**Response**
+In the JSON request above, we use `"paymentMethod":"CREDITCARD"`, which should be `"paymentMethod":"CREDIT_CARD"`, to test an invalid request.  
+This ensures the API correctly validates input and returns an appropriate error response for unsupported or incorrectly formatted values.  
+
+**Invalid Response:**
 ```json
 {
     "statusCode": 500,
