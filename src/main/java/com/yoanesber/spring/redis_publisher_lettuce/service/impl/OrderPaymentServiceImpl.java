@@ -15,16 +15,16 @@ import com.yoanesber.spring.redis_publisher_lettuce.dto.PaymentResponseDTO;
 import com.yoanesber.spring.redis_publisher_lettuce.entity.Order;
 import com.yoanesber.spring.redis_publisher_lettuce.entity.OrderDetail;
 import com.yoanesber.spring.redis_publisher_lettuce.entity.OrderPayment;
-import com.yoanesber.spring.redis_publisher_lettuce.redis.impl.MessagePublisherImpl;
+import com.yoanesber.spring.redis_publisher_lettuce.redis.MessagePublisher;
 import com.yoanesber.spring.redis_publisher_lettuce.service.OrderPaymentService;
 
 @Service
 public class OrderPaymentServiceImpl implements OrderPaymentService {
 
-    private final MessagePublisherImpl redisPublisher;
+    private final MessagePublisher messagePublisher;
 
-    public OrderPaymentServiceImpl(MessagePublisherImpl redisPublisher) {
-        this.redisPublisher = redisPublisher;
+    public OrderPaymentServiceImpl(MessagePublisher messagePublisher) {
+        this.messagePublisher = messagePublisher;
     }
 
     private Order getOrderByID (String orderId) {
@@ -90,7 +90,7 @@ public class OrderPaymentServiceImpl implements OrderPaymentService {
         return order;
     }
 
-    private Boolean validateOrderPayment(CreateOrderPaymentRequestDTO orderPaymentDTO) {
+    private void validateOrderPayment(CreateOrderPaymentRequestDTO orderPaymentDTO) {
         Assert.notNull(orderPaymentDTO, "OrderPaymentDTO must not be null");
         Assert.notNull(orderPaymentDTO.getOrderId(), "Order ID must not be null");
         Assert.notNull(orderPaymentDTO.getAmount(), "Amount must not be null");
@@ -129,7 +129,6 @@ public class OrderPaymentServiceImpl implements OrderPaymentService {
 
         // Additional validation checks can be added here
 
-        return true;
     }
 
     private PaymentResponseDTO processPaymentWithCC(PaymentCCRequestDTO paymentCCRequestDTO) {
@@ -152,7 +151,7 @@ public class OrderPaymentServiceImpl implements OrderPaymentService {
 
             return new PaymentResponseDTO(transactionId, paymentStatus);
         } catch (InterruptedException e) {
-            this.redisPublisher.publishMessage("PAYMENT_FAILED", "Error processing credit card payment for order " + 
+            messagePublisher.publish("PAYMENT_FAILED", "Error processing credit card payment for order " + 
                 paymentCCRequestDTO.getOrderId() + ": " + e.getMessage());
             return null;
         }
@@ -178,7 +177,7 @@ public class OrderPaymentServiceImpl implements OrderPaymentService {
 
             return new PaymentResponseDTO(transactionId, paymentStatus);
         } catch (InterruptedException e) {
-            this.redisPublisher.publishMessage("PAYMENT_FAILED", "Error processing PayPal payment for order " + 
+            messagePublisher.publish("PAYMENT_FAILED", "Error processing PayPal payment for order " + 
                 paymentPaypalRequestDTO.getOrderId() + ": " + e.getMessage());
             return null;
         }
@@ -204,7 +203,7 @@ public class OrderPaymentServiceImpl implements OrderPaymentService {
 
             return new PaymentResponseDTO(transactionId, paymentStatus);
         } catch (InterruptedException e) {
-            this.redisPublisher.publishMessage("PAYMENT_FAILED", "Error processing bank transfer payment for order " + 
+            messagePublisher.publish("PAYMENT_FAILED", "Error processing bank transfer payment for order " + 
                 paymentBankRequestDTO.getOrderId() + ": " + e.getMessage());
             return null;
         }
@@ -232,7 +231,7 @@ public class OrderPaymentServiceImpl implements OrderPaymentService {
                 orderPaymentDTO.getBankAccount(),
                 orderPaymentDTO.getBankName()));
         } else {
-            throw new IllegalArgumentException("Invalid payment method: " + orderPaymentDTO.getPaymentMethod());
+            return null; // Invalid payment method
         }
     }
 
@@ -241,19 +240,33 @@ public class OrderPaymentServiceImpl implements OrderPaymentService {
         Assert.notNull(orderPaymentDTO, "OrderPaymentDTO must not be null");
         
         // Validate request (check order exists, amount is valid, etc.)
-        if (!this.validateOrderPayment(orderPaymentDTO)) {
-            throw new IllegalArgumentException("Invalid order payment request");
-        }
+        this.validateOrderPayment(orderPaymentDTO);
         
         // Call the payment gateway API and get the transaction details
-        String paymentStatus = "SUCCESS"; // Assume payment is successful
+        String paymentStatus = "FAILED"; // Default to FAILED
         String transactionId = "";
         PaymentResponseDTO paymentResponse = this.processPayment(orderPaymentDTO);
 
+        // Check if the payment response is null (indicating a failure)
+        if (paymentResponse == null) {
+            messagePublisher.publish("PAYMENT_FAILED", "Payment processing failed for order " + 
+                orderPaymentDTO.getOrderId() + ": Payment response is null");
+                
+            throw new IllegalArgumentException("Payment processing failed: Payment response is null");
+        }
+
         // Extract the transaction ID and payment status from the response
-        if (paymentResponse != null) {
-            transactionId = paymentResponse.getTransactionId();
-            paymentStatus = paymentResponse.getPaymentStatus();
+        transactionId = paymentResponse.getTransactionId();
+        paymentStatus = paymentResponse.getPaymentStatus();
+
+        // Check if the payment status is "FAILED"
+        if (paymentStatus.equalsIgnoreCase("FAILED") || transactionId == null || transactionId.isEmpty()) {
+            // If payment failed, publish a Redis event to the "PAYMENT_FAILED" channel
+            messagePublisher.publish("PAYMENT_FAILED", "Payment processing failed for order " + 
+                orderPaymentDTO.getOrderId() + ": Payment status is FAILED or transaction ID is empty");
+
+            throw new IllegalArgumentException("Payment processing failed: " + 
+                "Payment status is FAILED or transaction ID is empty");
         }
 
         // Create an OrderPayment entity
@@ -282,9 +295,7 @@ public class OrderPaymentServiceImpl implements OrderPaymentService {
         // Save the OrderPayment entity to the database
         
         // Publish a Redis event to the "PAYMENT_SUCCESS" channel if successful
-        if (paymentStatus.equalsIgnoreCase("SUCCESS")) {
-            this.redisPublisher.publishMessage("PAYMENT_SUCCESS", orderPayment);
-        }
+        messagePublisher.publish("PAYMENT_SUCCESS", orderPayment);
 
         // For simplicity, we will return the OrderPayment object directly
         return orderPayment;

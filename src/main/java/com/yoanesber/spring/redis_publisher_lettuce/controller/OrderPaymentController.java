@@ -25,7 +25,18 @@ public class OrderPaymentController {
     @PostMapping
     public ResponseEntity<CustomHttpResponse> createOrderPayment(@RequestBody CreateOrderPaymentRequestDTO orderPaymentDTO) {
         try {
+            // Create a new OrderPayment record using the service layer.
             OrderPayment orderPayment = orderPaymentService.createOrderPayment(orderPaymentDTO);
+
+            // Check if the order payment was created successfully.
+            if (orderPayment == null) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new CustomHttpResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), 
+                        "Failed to create order payment", null));
+            }
+
+            // Return a successful response with the created order payment details.
+            // The response includes the order ID, transaction ID, payment status, amount, currency, payment method, and creation time.
             return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new CustomHttpResponse(HttpStatus.CREATED.value(),
                 "Order payment created successfully", 
